@@ -2,6 +2,8 @@
 
 var run = require('..');
 var optimist = require('optimist');
+var resolve = require('path').resolve;
+var cwd = process.cwd();
 
 var argv = optimist
   .usage(
@@ -26,12 +28,19 @@ var argv = optimist
   .describe('input', 'Input type. Defaults to \'javascript\', can be set to \'html\'.')
   .alias('i', 'input')
 
+  .describe('mock', 'Mock http server')
+  .alias('m', 'mock')
+
   .describe('help', 'Print help')
   .alias('h', 'help')
 
   .argv;
 
 if (argv.help) return optimist.showHelp();
+
+if ('string' == typeof argv.mock) {
+  argv.mock = require(resolve(cwd, argv.mock))
+}
 
 process.stdin
   .pipe(run(argv))

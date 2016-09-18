@@ -64,6 +64,10 @@ function runner (opts) {
       fs.createReadStream(__dirname + '/static/reporter.js').pipe(res);
       return;
     }
+    if (opts.mock && req.url.substring(0, 5) === '/mock') {
+      opts.mock(req, res);
+      return
+    }
     if (opts.static) {
       ecstatic({ root: opts.static })(req, res);
       return;
